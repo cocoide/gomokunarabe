@@ -13,7 +13,7 @@ type ACTIONTYPE =
   }
   | {
     type: "setGameBackup",
-    payload: { gameBackup: { squares: squareType[] } }
+    payload: { gameBackup: { squares: squareType[] }[] }
   }
 
 type STATETYPE = {
@@ -38,7 +38,7 @@ export const playReducer = (state: STATETYPE, action: ACTIONTYPE): STATETYPE => 
     case "setGameStatus":
       return { ...state, gameStatus: action.payload.gameStatus };
     case "setGameBackup":
-      return { ...state, gameBackup: [...state.gameBackup, action.payload.gameBackup] };
+      return { ...state, gameBackup: action.payload.gameBackup };
   }
 }
 

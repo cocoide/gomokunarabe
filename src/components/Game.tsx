@@ -27,7 +27,7 @@ const Game = () => {
             payload: { gameStatus: status }
         })
     };
-    const setGameBackup = (currentSquares: { squares: squareType[] }) => {
+    const setGameBackup = (currentSquares: { squares: squareType[] }[]) => {
         dispatch({
             type: "setGameBackup",
             payload: { gameBackup: currentSquares }
@@ -50,7 +50,7 @@ const Game = () => {
             return;
         }
         squares[squareIndex] = state.xIsNext ? "X" : "O";
-        setGameBackup({ squares })
+        setGameBackup(history.concat([{ squares }]))
         setGameStep(history.length)
         changeTurn(!state.xIsNext)
     };
