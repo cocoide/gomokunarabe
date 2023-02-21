@@ -3,7 +3,7 @@ import React from 'react';
 interface Props {
     onClick: () => void;
     squareValue: squareType;
-}
+};
 
 export const Square = (props: Props) => {
     return (
