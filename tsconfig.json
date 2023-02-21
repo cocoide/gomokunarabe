@@ -2,13 +2,11 @@
   "compilerOptions": {
     "jsx": "react",
     "strict": true,
-    "allowJs": true,
-    "checkJs": false,
     "outDir": "./dist",
     "target": "es5",
     "module": "es2015",
     "esModuleInterop": true
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "gameReducer.ts"],
   "exclude": ["node_modules"]
 }

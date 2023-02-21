@@ -1,43 +1,64 @@
 import "./index.css";
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useReducer } from 'react';
 import ReactDOM from 'react-dom/client';
 import { Board } from './components/Board';
+import { playReducer, playInitialState } from './reducers/playReducer';
 
 const Game = () => {
-  let squares: squareType[] = [null, null, null, null, null, null, null, null, null]
-  const [nowHistory, setNowHistory] = useState<{ squares: squareType[] }[]>([{ squares }])
-  const [stepNumber, setStepNumber] = useState<number>(0)
-  const [xIsNext, toggleXIsNext] = useState<boolean>(true)
-  const [gameStatus, setGameStatus] = useState<string>("")
+  const [state, dispatch] = useReducer(playReducer, playInitialState)
+  const currentSquare = state.gameBackup[state.stepNumber];
+  const isGameEnd = calculateWinner(currentSquare.squares);
 
-  const currentSquare = nowHistory[stepNumber];
-  const winner = calculateWinner(currentSquare.squares);
+  const setGameStep = (step: number) => {
+    dispatch({
+      type: "setGameStep",
+      payload: { stepNumber: step }
+    })
+  };
+  const changeTurn = (turn: boolean) => {
+    dispatch({
+      type: "changeTurn",
+      payload: { turnState: turn }
+    })
+  };
+  const setGameStatus = (status: string) => {
+    dispatch({
+      type: "setGameStatus",
+      payload: { gameStatus: status }
+    })
+  };
+  const setGameBackup = (currentSquares: { squares: squareType[] }) => {
+    dispatch({
+      type: "setGameBackup",
+      payload: { gameBackup: currentSquares }
+    })
+  };
 
   useEffect(() => {
-    if (winner) {
-      setGameStatus("Winner: " + winner)
+    if (isGameEnd) {
+      setGameStatus("Winner: " + isGameEnd)
     } else {
-      setGameStatus("Next player: " + (xIsNext ? "X" : "O"))
+      setGameStatus("Next player: " + (state.xIsNext ? "X" : "O"))
     }
-  }, [winner, xIsNext])
-
+  }, [isGameEnd, state.xIsNext])
 
   function handleClick(i: number) {
-    const history = nowHistory.slice(0, stepNumber + 1);
+    const history = state.gameBackup.slice(0, state.stepNumber + 1);
     const currentSquare = history[history.length - 1];
     const squares = currentSquare.squares.slice();
     if (calculateWinner(squares) || squares[i]) {
       return;
     }
-    squares[i] = xIsNext ? "X" : "O";
-    setNowHistory([...nowHistory, { squares }])
-    setStepNumber(history.length,)
-    toggleXIsNext(!xIsNext)
+    squares[i] = state.xIsNext ? "X" : "O";
+    setGameBackup({ squares })
+    setGameStep(history.length,)
+    changeTurn(!state.xIsNext)
+    console.log(state.gameBackup)
   }
 
-  function jumpTo(step: number) {
-    setStepNumber(step)
-    toggleXIsNext(step % 2 === 0)
+  function restoreBackup(step: number) {
+    setGameStep(step)
+    changeTurn(step % 2 === 0)
   };
 
   return (
@@ -45,19 +66,19 @@ const Game = () => {
       <div className="game-board">
         <Board
           squares={currentSquare.squares}
-          onClick={() => handleClick(stepNumber)}
+          onClick={() => handleClick(state.stepNumber)}
         />
       </div>
       <div className="game-info">
-        <div>{gameStatus}</div>
+        <div>{state.gameStatus}</div>
         <ol>{
-          nowHistory.map((step, move) => {
-            const desc = move ? "Go to move #" + move : "Go to game start";
+          state.gameBackup.map((step, stepIndex) => {
+            const desc = stepIndex ? "Go to move #" + stepIndex : "Go to game start";
             return (
-              <li key={move}>
+              <li key={stepIndex}>
                 <button
                   onClick={() => {
-                    jumpTo(move);
+                    restoreBackup(stepIndex);
                   }}
                 >
                   {desc}
@@ -98,3 +119,4 @@ function calculateWinner(squares: squareType[]) {
   }
   return null;
 }
+

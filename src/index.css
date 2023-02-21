@@ -1,16 +1,17 @@
 body {
     font: 14px "Century Gothic", Futura, sans-serif;
     margin: 20px;
+    width: 100%;
   }
   
   ol, ul {
     padding-left: 30px;
   }
+
   
-  .board-row:after {
-    clear: both;
-    content: "";
-    display: table;
+  .board-grid {
+    display: grid; 
+    grid-template-columns: repeat(3, 1fr);
   }
   
   .status {
@@ -43,8 +44,10 @@ body {
   .game {
     display: flex;
     flex-direction: row;
+    width: 100%;
   }
   
   .game-info {
     margin-left: 20px;
+    width: 100%;
   }
