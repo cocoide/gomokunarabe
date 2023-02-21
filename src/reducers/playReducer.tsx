@@ -1,3 +1,11 @@
+import { SIZE } from '../libs/constants'
+
+export const playInitialState = {
+  stepNumber: 0,
+  xIsNext: true,
+  gameStatus: "",
+  gameBackup: [{ squares: Array<squareType>(SIZE ** 2).fill(null) }]
+}
 type ACTIONTYPE =
   | {
     type: "changeTurn",
@@ -22,12 +30,7 @@ type STATETYPE = {
   gameStatus: string,
   gameBackup: { squares: squareType[] }[],
 }
-export const playInitialState = {
-  stepNumber: 0,
-  xIsNext: true,
-  gameStatus: "",
-  gameBackup: [{ squares: [null, null, null, null, null, null, null, null, null] }]
-}
+
 
 export const playReducer = (state: STATETYPE, action: ACTIONTYPE): STATETYPE => {
   switch (action.type) {
@@ -41,15 +44,3 @@ export const playReducer = (state: STATETYPE, action: ACTIONTYPE): STATETYPE => 
       return { ...state, gameBackup: action.payload.gameBackup };
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-

@@ -7,6 +7,6 @@
     "module": "es2015",
     "esModuleInterop": true
   },
-  "include": ["src/**/*", "gameReducer.ts"],
+  "include": ["src/**/*"],
   "exclude": ["node_modules"]
 }

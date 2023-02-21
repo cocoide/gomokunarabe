@@ -3,6 +3,7 @@ import React, { useEffect, useReducer } from 'react';
 import { playInitialState, playReducer } from '../reducers/playReducer';
 import { Board } from './Board';
 import GameInfo from './GameInfo';
+import { calculateWinner } from '../utils/calculateWinner';
 
 const Game = () => {
     const [state, dispatch] = useReducer(playReducer, playInitialState)
@@ -74,27 +75,3 @@ const Game = () => {
 };
 
 export default Game
-
-function calculateWinner(squares: squareType[]) {
-    const lines = [
-        [0, 1, 2],
-        [3, 4, 5],
-        [6, 7, 8],
-        [0, 3, 6],
-        [1, 4, 7],
-        [2, 5, 8],
-        [0, 4, 8],
-        [2, 4, 6],
-    ];
-    for (let i = 0; i < lines.length; i++) {
-        const [a, b, c] = lines[i];
-        if (
-            squares[a] &&
-            squares[a] === squares[b] &&
-            squares[a] === squares[c]
-        ) {
-            return squares[a];
-        }
-    }
-    return null;
-}
